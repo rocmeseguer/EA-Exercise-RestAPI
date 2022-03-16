@@ -34,7 +34,8 @@ export async function getTodos (req: Request, res: Response): Promise<Response> 
 export async function getTodo(req: Request, res: Response): Promise<Response> {
   console.log('Get todo');
   const _id = req.params.id;
-  const todo = await Todo.findById(_id);
+  const todo = await Todo.findById(_id).populate('user');
+  console.log(todo);
   return res.json(todo);
 }
 
