@@ -1,20 +1,25 @@
-import { Schema, model, Document } from 'mongoose';
+const mongoose = require('mongoose');
 
-// Mongo document model
-
-const schema = new Schema({
-    username: String,
-    password: String,
-    email: String
+const UserSchema = new mongoose.Schema({
+  id: { type: Number, required: true },
+  name: { type: String, required: true },
+  email: { type: String, required: true},
+  username: { type: String, required: true},
+  address: {
+    street: String,
+    suite: String,
+    city: String,
+    zipcode: String,
+    geo: {
+      lat: String,
+      lng: String
+    }
+  },
+  phone: String,
+  website: String,
+  company: {
+    name: String
+  }
 });
 
-
-// Typescript type (interface)
-
-export interface IUser extends Document {
-    username: string;
-    password: string;
-    email: string;
-}
-
-export default model<IUser>('User', schema);
+export default mongoose.model("User", UserSchema);

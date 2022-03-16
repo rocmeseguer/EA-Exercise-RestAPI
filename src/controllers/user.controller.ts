@@ -7,12 +7,13 @@ export function helloWorld (req: Request, res: Response): Response {
 }
 
 export async function createUser (req: Request, res: Response): Promise<Response> {
-  const { username, password, email } = req.body;
+  const { id, name, email, username } = req.body;
   console.log('Creating user');
   const newUser = {
-    username: username,
-    password: password,
-    email: email
+    id: id,
+    name: name,
+    email: email,
+    username: username
   }
   const user = new User(newUser);
   await user.save();
@@ -49,12 +50,13 @@ export async function deleteUser(req: Request, res: Response): Promise<Response>
 
 export async function updateUser(req: Request, res: Response): Promise<Response> {
   console.log('Update user');
-  const id = req.params.id;
-  const { username, password, email } = req.body; // Destructuring https://www.typescriptlan      g.org/docs/handbook/variable-declarations.html#destructuring
-  const user = await User.findByIdAndUpdate(id, {
-    username,
-    password,
-    email
+  const _id = req.params.id;
+  const { id, name, email, username } = req.body;
+  const user = await User.findByIdAndUpdate(_id, {
+    id,
+    name,
+    email,
+    username
   }, {new: true});
   return res.json({
     message: "User updated",

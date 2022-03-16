@@ -1,18 +1,22 @@
-import express, { Application } from 'express';
-const cors = require("cors");
-import indexRoutes from './routes/index';
+import express, { RequestHandler } from 'express';
+import cors from 'cors';
+
+import userRoutes from './routes/user';
+import todoRoutes from './routes/todo';
 
 // Initializations
-const app: Application = express();
+const app: express.Application = express();
 
 // Settings
 app.set('port', process.env.PORT || 4000);
 
 // Middelwares
-app.use(express.json());
 app.use(cors());
+app.use(express.json() as RequestHandler);
+
 
 // Routes
-app.use('/api', indexRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/todos', todoRoutes);
 
 export default app;

@@ -3,11 +3,11 @@ const router = Router();
 
 import { createUser, getUsers, getUser, deleteUser, updateUser } from '../controllers/user.controller'
 
-router.route('/users')
+router.route('/')
   .post(createUser)
   .get(getUsers)
 
-router.route('/user/:id')
+router.route('/:id')
   .get(getUser)
   .delete(deleteUser)
   .put(updateUser)

@@ -42,14 +42,14 @@ vi package.json
 Typescript
 
 ```
-npx tsc --init
+tsc --init
 vi tsconfig.json
 ```
 
 ## Run
 
 ```
-npx tsc
+tsc
 node dist/index.js
 ```
 
