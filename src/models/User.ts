@@ -1,7 +1,29 @@
-const mongoose = require('mongoose');
+import { ObjectId, Schema, model } from "mongoose";
 
-const UserSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
+export interface IUser {
+    id: number;
+    name: string;
+    email: string;
+    username: string;
+    address: {
+      street: string;
+      suite: string;
+      city: string;
+      zipcode: string;
+      geo: {
+        lat: string;
+        lng: string;
+      }
+    }
+    phone: string;
+    website: string;
+    company: {
+      name: string;
+    }
+}
+
+const UserSchema = new Schema <IUser>({
+  id: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
   email: { type: String, required: true},
   username: { type: String, required: true},
@@ -12,7 +34,7 @@ const UserSchema = new mongoose.Schema({
     zipcode: String,
     geo: {
       lat: String,
-      lng: String
+      lng: String,
     }
   },
   phone: String,
@@ -22,4 +44,4 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model("User", UserSchema);
+export const UserModel =  model("User", UserSchema); 
