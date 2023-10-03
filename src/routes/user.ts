@@ -1,15 +1,15 @@
 import { Router } from 'express';
+import { userValidationRules, userValidator } from '../middlewares/user.validator'
+
 const router = Router();
 
 import { createUser, getUsers, getUser, deleteUser, updateUser } from '../controllers/user.controller'
 
-router.route('/')
-  .post(createUser)
-  .get(getUsers)
+router.get( "/", getUsers);
+router.post( "/", userValidationRules(), userValidator, createUser );
 
-router.route('/:id')
-  .get(getUser)
-  .delete(deleteUser)
-  .put(updateUser)
+router.get('/:id', getUser);
+router.delete('/:id', deleteUser);
+router.put('/:id', updateUser);
 
 export default router;

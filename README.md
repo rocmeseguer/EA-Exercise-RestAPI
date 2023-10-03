@@ -17,6 +17,7 @@ Express
 ```
 npm i express
 npm i @types/express -D
+npm install express-validator
 ```
 
 Mongo
@@ -29,6 +30,7 @@ CORS
 ```
 npm i cors
 ```
+
 
 ## Config
 
