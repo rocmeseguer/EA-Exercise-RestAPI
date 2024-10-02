@@ -1,66 +1,89 @@
-import { Request, Response } from 'express'
+// src/controllers/todo.controller.ts
+import { Request, Response } from 'express';
+import { TodoService } from '../services/todo.service';
+import { ITodo } from '../models/Todo';
 
-import { ITodo, TodoModel } from '../models/Todo';
+const todoService = new TodoService();
 
-export function helloWorld (req: Request, res: Response): Response { 
-  return res.send('hello world');
-}
+export async function createTodo(req: Request, res: Response): Promise<Response> {
+  try {
+    console.log('Creating todo');
+    const { id, user, name, completed } = req.body as ITodo;
+    const newTodo: Partial<ITodo> = { id, user, name, completed };
 
-export async function createTodo (req: Request, res: Response): Promise<Response> {
-  const { id, user, name, completed } = req.body;
-  console.log('Creating todo');
-  const newTodo = {
-    id: id,
-    user: user,
-    name: name,
-    completed: completed
+    const todo = await todoService.createTodo(newTodo);
+    
+    return res.json({
+      message: "Todo created",
+      todo
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to create todo' });
   }
-  const todo = new TodoModel(newTodo);
-  await todo.save();
-  console.log(todo);
-
-  return res.json({
-    message: "Todo created",
-    todo
-  });
 }
 
-export async function getTodos (req: Request, res: Response): Promise<Response> {
-  console.log('Get todos');
-  const todos = await TodoModel.find();
-  return res.json(todos);
+export async function getTodos(req: Request, res: Response): Promise<Response> {
+  try {
+    console.log('Get todos');
+    const todos = await todoService.getTodos();
+    return res.json(todos);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to get todos' });
+  }
 }
 
 export async function getTodo(req: Request, res: Response): Promise<Response> {
-  console.log('Get todo');
-  const _id = req.params.id;
-  const todo = await TodoModel.findById(_id).populate('user');
-  console.log(todo);
-  return res.json(todo);
+  try {
+    console.log('Get todo');
+    const _id = req.params.id;
+    const todo = await todoService.getTodoById(_id);
+    
+    if (!todo) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    return res.json(todo);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to get todo' });
+  }
 }
 
 export async function deleteTodo(req: Request, res: Response): Promise<Response> {
-  console.log('Delete todo');
-  const _id = req.params.id;
-  const todo = await TodoModel.findByIdAndRemove(_id);
-  return res.json({
-    message: "Todo deleted",
-    todo
-  });
+  try {
+    console.log('Delete todo');
+    const _id = req.params.id;
+    const todo = await todoService.deleteTodoById(_id);
+    
+    if (!todo) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    return res.json({
+      message: "Todo deleted",
+      todo
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to delete todo' });
+  }
 }
 
 export async function updateTodo(req: Request, res: Response): Promise<Response> {
-  console.log('Update todo');
-  const _id = req.params.id;
-  const { id, user, name, completed } = req.body; // Destructuring 
-  const todo = await TodoModel.findByIdAndUpdate(_id, {
-    id,
-    user,
-    name,
-    completed
-  }, {new: true});
-  return res.json({
-    message: "Todo updated",
-    todo
-  });
+  try {
+    console.log('Update todo');
+    const _id = req.params.id;
+    const { id, user, name, completed } = req.body as ITodo;
+    const updatedTodo: Partial<ITodo> = { id, user, name, completed };
+    const todo = await todoService.updateTodoById(_id, updatedTodo);
+    
+    if (!todo) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    return res.json({
+      message: "Todo updated",
+      todo
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to update todo' });
+  }
 }

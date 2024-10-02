@@ -1,65 +1,90 @@
-import { Request, Response } from 'express'
+// src/controllers/user.controller.ts
+import { Request, Response } from 'express';
+import { IUser } from '../models/User';
+import { UserService } from '../services/user.service';
 
-import { IUser, UserModel } from '../models/User';
+const userService = new UserService();
 
-export function helloWorld (req: Request, res: Response): Response { 
-  return res.send('hello world');
-}
-
-export async function createUser (req: Request, res: Response): Promise<Response> {
-  const { id, name, email, username } = req.body;
-  console.log('Creating user');
-  const newUser = {
-    id: id,
-    name: name,
-    email: email,
-    username: username
+export async function createUser(req: Request, res: Response): Promise<Response> {
+  try {
+    const { id, name, email, username } = req.body as IUser;
+    console.log('Creating user');
+    
+    const newUser: Partial<IUser> = { id, name, email, username };
+    const user = await userService.createUser(newUser);
+    
+    return res.json({
+      message: "User created",
+      user
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to create user' });
   }
-  const user = new UserModel(newUser);
-  await user.save();
-  console.log(user);
-
-  return res.json({
-    message: "User created",
-    user
-  });
 }
 
-export async function getUsers (req: Request, res: Response): Promise<Response> {
-  console.log('Get users');
-  const users = await UserModel.find();
-  return res.json(users);
+export async function getUsers(req: Request, res: Response): Promise<Response> {
+  try {
+    console.log('Get users');
+    const users = await userService.getUsers();
+    return res.json(users);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to get users' });
+  }
 }
 
 export async function getUser(req: Request, res: Response): Promise<Response> {
-  console.log('Get user');
-  const id = req.params.id;
-  const user = await UserModel.findById(id);
-  return res.json(user);
+  try {
+    console.log('Get user');
+    const id = req.params.id;
+    const user = await userService.getUserById(id);
+    
+    if (!user) {
+      return res.status(404).json({ error: `User with id ${id} not found` });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to get user' });
+  }
 }
 
 export async function deleteUser(req: Request, res: Response): Promise<Response> {
-  console.log('Delete user');
-  const id = req.params.id;
-  const user = await UserModel.findByIdAndRemove(id);
-  return res.json({
-    message: "User deleted",
-    user
-  });
+  try {
+    console.log('Delete user');
+    const id = req.params.id;
+    const user = await userService.deleteUserById(id);
+    
+    if (!user) {
+      return res.status(404).json({ error: `User with id ${id} not found` });
+    }
+
+    return res.json({
+      message: "User deleted",
+      user
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to delete user' });
+  }
 }
 
 export async function updateUser(req: Request, res: Response): Promise<Response> {
-  console.log('Update user');
-  const _id = req.params.id;
-  const { id, name, email, username } = req.body;
-  const user = await UserModel.findByIdAndUpdate(_id, {
-    id,
-    name,
-    email,
-    username
-  }, {new: true});
-  return res.json({
-    message: "User updated",
-    user
-  });
+  try {
+    console.log('Update user');
+    const _id = req.params.id;
+    const { id, name, email, username } = req.body as IUser;
+    
+    const updatedUser: Partial<IUser> = { id, name, email, username };
+    const user = await userService.updateUserById(_id, updatedUser);
+    
+    if (!user) {
+      return res.status(404).json({ error: `User with id ${_id} not found` });
+    }
+
+    return res.json({
+      message: "User updated",
+      user
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to update user' });
+  }
 }
