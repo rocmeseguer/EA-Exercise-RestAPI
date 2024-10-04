@@ -51,11 +51,11 @@ npm i cors
 
 ```
 ├── src
-│   ├── controllers
 │   ├── middlewares
-│   ├── models
 │   ├── routes
+│   ├── controllers
 │   ├── services
+│   ├── models
 │   ├── database.ts
 │   └── app.ts          # Punto de entrada de la aplicación
 ├── build

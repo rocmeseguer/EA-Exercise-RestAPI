@@ -3,13 +3,10 @@ const router = Router();
 
 import { createTodo, getTodos, getTodo, deleteTodo, updateTodo } from '../controllers/todo.controller'
 
-router.route('/')
-  .post(createTodo)
-  .get(getTodos)
-
-router.route('/:id')
-  .get(getTodo)
-  .delete(deleteTodo)
-  .put(updateTodo)
+router.get( "/", getTodos);
+router.post( "/", createTodo );
+router.get('/:id', getTodo);
+router.put('/:id', updateTodo);
+router.delete('/:id', deleteTodo);
 
 export default router;

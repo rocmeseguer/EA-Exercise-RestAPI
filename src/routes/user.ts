@@ -7,9 +7,8 @@ import { createUser, getUsers, getUser, deleteUser, updateUser } from '../contro
 
 router.get( "/", getUsers);
 router.post( "/", userValidationRules(), userValidator, createUser );
-
 router.get('/:id', getUser);
-router.delete('/:id', deleteUser);
 router.put('/:id', updateUser);
+router.delete('/:id', deleteUser);
 
 export default router;

@@ -7,10 +7,10 @@ const userService = new UserService();
 
 export async function createUser(req: Request, res: Response): Promise<Response> {
   try {
-    const { id, name, email, username } = req.body as IUser;
+    const { name, email, username } = req.body as IUser;
     console.log('Creating user');
     
-    const newUser: Partial<IUser> = { id, name, email, username };
+    const newUser: Partial<IUser> = { name, email, username };
     const user = await userService.createUser(newUser);
     
     return res.json({
@@ -71,9 +71,9 @@ export async function updateUser(req: Request, res: Response): Promise<Response>
   try {
     console.log('Update user');
     const _id = req.params.id;
-    const { id, name, email, username } = req.body as IUser;
+    const { name, email, username } = req.body as IUser;
     
-    const updatedUser: Partial<IUser> = { id, name, email, username };
+    const updatedUser: Partial<IUser> = { name, email, username };
     const user = await userService.updateUserById(_id, updatedUser);
     
     if (!user) {

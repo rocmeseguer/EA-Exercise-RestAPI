@@ -8,8 +8,8 @@ const todoService = new TodoService();
 export async function createTodo(req: Request, res: Response): Promise<Response> {
   try {
     console.log('Creating todo');
-    const { id, user, name, completed } = req.body as ITodo;
-    const newTodo: Partial<ITodo> = { id, user, name, completed };
+    const { user, name, completed } = req.body as ITodo;
+    const newTodo: Partial<ITodo> = { user, name, completed };
 
     const todo = await todoService.createTodo(newTodo);
     
@@ -71,8 +71,8 @@ export async function updateTodo(req: Request, res: Response): Promise<Response>
   try {
     console.log('Update todo');
     const _id = req.params.id;
-    const { id, user, name, completed } = req.body as ITodo;
-    const updatedTodo: Partial<ITodo> = { id, user, name, completed };
+    const { user, name, completed } = req.body as ITodo;
+    const updatedTodo: Partial<ITodo> = { user, name, completed };
     const todo = await todoService.updateTodoById(_id, updatedTodo);
     
     if (!todo) {

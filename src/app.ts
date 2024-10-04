@@ -10,7 +10,7 @@ const app: express.Application = express();
 // Settings
 app.set('port', process.env.PORT || 4000);
 
-// Middelwares
+// Middlewares
 app.use(cors());
 app.use(express.json() as RequestHandler);
 
