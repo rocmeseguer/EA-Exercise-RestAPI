@@ -8,6 +8,7 @@ export class TodoService {
   }
 
   async getTodos(): Promise<ITodo[]> {
+    console.log('Get todos');
     return await TodoModel.find();
   }
 

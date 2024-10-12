@@ -6,7 +6,6 @@ import { body, validationResult } from 'express-validator';
 export const userValidationRules = () => {
   return [
     body('email').isEmail().withMessage('email is invalid'),
-    body('id').isNumeric().withMessage('id is not numeric'),
   ]
 }
 

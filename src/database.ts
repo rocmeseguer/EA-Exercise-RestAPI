@@ -21,13 +21,9 @@ export async function startConnection() {
 // Función para poblar la base de datos
 export async function populateDatabase() {
     try {
-        // Conectar a la base de datos
-        const db = await connect(mongoURI);
-
         // Eliminar todos los documentos actuales
         await UserModel.deleteMany({});
         await TodoModel.deleteMany({});
-
 
         // Crear usuarios de ejemplo
         const user1 = new UserModel({
@@ -49,8 +45,6 @@ export async function populateDatabase() {
         // Guardar Users de ejemplo
         const savedUser1 = await user1.save();
         const savedUser2 = await user2.save();
-
-        console.log('Users inserted: ', savedUser1._id, savedUser2._id);
 
         // Crear Todos de ejemplo asociadas a los usuarios
         const todo1 = new TodoModel({
@@ -76,13 +70,8 @@ export async function populateDatabase() {
         const savedTodo2 = await todo2.save();
         const savedTodo3 = await todo3.save();
 
-        console.log('Todos inserted: ', savedTodo1._id, savedTodo2._id, savedTodo3._id);
         
     } catch (error) {
         console.error('Error populating the database: ', error);
-    } finally {
- 
-        // Cerrar la conexión con la base de datos
-        connection.close();
-    }
+    } 
 }
