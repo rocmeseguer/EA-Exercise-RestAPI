@@ -1,7 +1,7 @@
 // src/controllers/todo.controller.ts
 import { Request, Response } from 'express';
-import { TodoService } from '../services/todo.service';
-import { ITodo } from '../models/Todo';
+import { TodoService } from '../services/todo.js';
+import { ITodo } from '../models/todo.js';
 
 const todoService = new TodoService();
 
@@ -11,7 +11,7 @@ export async function createTodo(req: Request, res: Response): Promise<Response>
     const { user, name, completed } = req.body as ITodo;
     const newTodo: Partial<ITodo> = { user, name, completed };
 
-    const todo = await todoService.createTodo(newTodo);
+    const todo = await todoService.createTodo(newTodo, user);
     
     return res.json({
       message: "Todo created",

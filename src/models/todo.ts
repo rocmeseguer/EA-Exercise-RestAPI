@@ -1,7 +1,7 @@
-import { ObjectId, Schema, model } from "mongoose";
+import { Types, Schema, model } from "mongoose";
 
 export interface ITodo {
-    user: ObjectId;
+    user: Types.ObjectId;
     name: string;
     completed: boolean
 }

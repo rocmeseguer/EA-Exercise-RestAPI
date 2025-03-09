@@ -1,11 +1,18 @@
 // src/controllers/user.controller.ts
 import { Request, Response } from 'express';
-import { IUser } from '../models/User';
-import { UserService } from '../services/user.service';
+import { IUser } from '../models/user.js';
+import { UserService } from '../services/user.js';
+import { validationResult } from "express-validator";
 
 const userService = new UserService();
 
 export async function createUser(req: Request, res: Response): Promise<Response> {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Create a new user
   try {
     const { name, email, username } = req.body as IUser;
     console.log('Creating user');

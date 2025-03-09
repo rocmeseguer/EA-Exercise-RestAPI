@@ -1,22 +1,18 @@
-import { connect, connection } from 'mongoose'
-import { UserModel } from './models/User';
-import { TodoModel } from './models/Todo'; 
+import mongoose from 'mongoose';
+import { UserModel } from './models/user';
+import { TodoModel } from './models/todo'; 
 
 // Conexión a la base de datos (cambiar según tu configuración)
 const mongoURI = 'mongodb://localhost:27017/ea-restapi';  
 
-
+// Connection
 export async function startConnection() {
-    const db = await connect(mongoURI, (err) => {
-        if (err) {
-            console.log('Unable to connect to the server. Please start the server. Error:', err);
-        } else {
-            console.log('Connected to Server successfully!');
-        }
-    });
+    mongoose.set('strictQuery', true); // Mantiene el comportamiento actual
+
+    await mongoose.connect(mongoURI)
+    .then(() => console.log('Conectado a MongoDB'))
+    .catch(err => console.error('Error al conectar:', err));
 }
-
-
 
 // Función para poblar la base de datos
 export async function populateDatabase() {
@@ -31,7 +27,6 @@ export async function populateDatabase() {
             email: 'john@example.com',
             username: 'johndoe',
             phone: '123-456-7890',
-            company: { name: 'Doe Industries' }
         });
 
         const user2 = new UserModel({
@@ -39,7 +34,6 @@ export async function populateDatabase() {
             email: 'jane@example.com',
             username: 'janesmith',
             phone: '987-654-3210',
-            company: { name: 'Smith Corp' }
         });
 
         // Guardar Users de ejemplo
