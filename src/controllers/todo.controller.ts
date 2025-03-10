@@ -5,6 +5,7 @@ import { ITodo } from '../models/todo.js';
 
 const todoService = new TodoService();
 
+// Controller (HTTP) for creating a new todo
 export async function createTodo(req: Request, res: Response): Promise<Response> {
   try {
     console.log('Creating todo');
@@ -22,6 +23,7 @@ export async function createTodo(req: Request, res: Response): Promise<Response>
   }
 }
 
+// Controller (HTTP) for getting all todos
 export async function getTodos(req: Request, res: Response): Promise<Response> {
   try {
     console.log('Get todos');
@@ -32,6 +34,7 @@ export async function getTodos(req: Request, res: Response): Promise<Response> {
   }
 }
 
+// Controller (HTTP) for getting a todo by id
 export async function getTodo(req: Request, res: Response): Promise<Response> {
   try {
     console.log('Get todo');
@@ -48,6 +51,7 @@ export async function getTodo(req: Request, res: Response): Promise<Response> {
   }
 }
 
+// Controller (HTTP) for deleting a todo by id
 export async function deleteTodo(req: Request, res: Response): Promise<Response> {
   try {
     console.log('Delete todo');
@@ -67,6 +71,7 @@ export async function deleteTodo(req: Request, res: Response): Promise<Response>
   }
 }
 
+// Controller (HTTP) for updating a todo by id
 export async function updateTodo(req: Request, res: Response): Promise<Response> {
   try {
     console.log('Update todo');

@@ -5,6 +5,7 @@ const router = Router();
 
 import { createUser, getUsers, getUser, deleteUser, updateUser } from '../controllers/user.controller'
 
+// All routes are starting with /api/users
 router.get( "/", getUsers);
 router.post( "/", userValidationRules(), createUser );
 router.get('/:id', getUser);

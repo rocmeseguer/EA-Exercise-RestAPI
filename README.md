@@ -39,7 +39,6 @@ npm i express-validator
 Mongoose
 ```
 npm i mongoose
-npm i @types/mongoose -D
 ```
 
 CORS
