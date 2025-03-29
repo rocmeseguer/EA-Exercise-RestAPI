@@ -1,17 +1,15 @@
 import mongoose from 'mongoose';
 import { UserModel } from './models/user';
 import { TodoModel } from './models/todo'; 
-
-// Conexión a la base de datos (cambiar según tu configuración)
-const mongoURI = 'mongodb://localhost:27017/ea-restapi';  
+import { config } from './config/config';
 
 // Connection
 export async function startConnection() {
-    mongoose.set('strictQuery', true); // Mantiene el comportamiento actual
+    mongoose.set('strictQuery', true);
 
-    await mongoose.connect(mongoURI)
-    .then(() => console.log('Conectado a MongoDB'))
-    .catch(err => console.error('Error al conectar:', err));
+    await mongoose.connect(config.mongodb.uri)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Error connecting:', err));
 }
 
 // Función para poblar la base de datos
