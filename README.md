@@ -46,6 +46,15 @@ CORS
 npm i cors
 ```
 
+## Tecnologías utilizadas
+
+- **Node.js**: Un entorno de ejecución de JavaScript en el lado del servidor.
+- **TypeScript**: Lenguaje de programación de alto nivel de código abierto que añade tipado estático a JavaScript.
+- **Mongoose**: Una libreria para usar MondoDB como base de datos.
+- **Express**: Una librería para hacer aplicaciones web
+- **Morgan**: HTTP request logger middleware for node.js
+- **Pino**: Una librería para hacer logs
+
 ## Estructura del proyecto
 
 ```
@@ -57,7 +66,7 @@ npm i cors
 │   ├── models
 │   ├── database.ts
 │   └── app.ts          # Punto de entrada de la aplicación
-├── build
+├── dist
 ├── package.json       # Configuración de las dependencias y scripts
 ├── tsconfig.json       # Configuración de TypeScript
 ├── node_modules
@@ -69,5 +78,5 @@ npm i cors
 ## Ejecutar
 ```
 tsc
-node build/index.js
+node dist/index.js
 ```

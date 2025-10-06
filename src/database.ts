@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { UserModel } from './models/user';
 import { TodoModel } from './models/todo'; 
-import { config } from './config/config';
+import { config } from './config/mongodb';
 
 // Connection
 export async function startConnection() {

@@ -1,5 +1,6 @@
 import express, { RequestHandler } from 'express';
 import cors from 'cors';
+import morgan from "morgan";
 import { config } from './config/config';
 
 import userRoutes from './routes/user';
@@ -12,6 +13,7 @@ const app: express.Application = express();
 app.set('port', config.port);
 
 // Middlewares
+app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json() as RequestHandler);
 
