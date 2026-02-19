@@ -1,17 +1,22 @@
-import app from './app'
-import { startConnection, populateDatabase } from './database';
+import app from './app.js'
+import { setupDatabase, seedingDatabase } from './database.js';
+import { logger } from './config.js';
 
 async function main() {
-  startConnection(); 
-  
-  populateDatabase()
-    .then(() => console.log('Database populated successfully'))
-    .catch(err => console.error('Failed to populate database', err));
-  
-  
-  
-  await app.listen(app.get('port'));
-  console.log('Server on port', app.get('port'));
+  try {
+    // CRITICAL: await the database setup before starting the server
+    await setupDatabase(); 
+    await seedingDatabase();
+    
+    const port = app.get('port');
+    app.listen(port, () => {
+      logger.info('🚀 Server running on port %d', port);
+    });
+    
+  } catch (error) {
+    logger.fatal(error, 'Failed to start application');
+    process.exit(1);
+  }
 }
 
 main();

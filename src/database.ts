@@ -1,69 +1,45 @@
 import mongoose from 'mongoose';
-import { UserModel } from './models/user';
-import { TodoModel } from './models/todo'; 
-import { config } from './config/mongodb';
+import { OrganizationModel } from './models/organizationModel.js';
+import { UserModel } from './models/userModel.js';
+import { config, logger } from './config.js';
 
-// Connection
-export async function startConnection() {
-    mongoose.set('strictQuery', true);
-
-    await mongoose.connect(config.mongodb.uri)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Error connecting:', err));
+export async function setupDatabase(): Promise<void> {
+    try {
+        mongoose.set('strictQuery', true);
+        await mongoose.connect(config.mongoUri);
+        logger.info('🚀 Connected to MongoDB');
+    } catch (err) {
+        logger.error(err, '❌ Database connection failed');
+        throw err; // Re-throw so main() can handle it
+    }
 }
 
-// Función para poblar la base de datos
-export async function populateDatabase() {
+export async function seedingDatabase(): Promise<void> {
     try {
-        // Eliminar todos los documentos actuales
-        await UserModel.deleteMany({});
-        await TodoModel.deleteMany({});
+        logger.warn('🧹 Cleaning database collections...');
+        await Promise.all([
+            UserModel.deleteMany({}),
+            OrganizationModel.deleteMany({})
+        ]);
 
-        // Crear usuarios de ejemplo
-        const user1 = new UserModel({
-            name: 'John Doe',
-            email: 'john@example.com',
-            username: 'johndoe',
-            phone: '123-456-7890',
-        });
+        logger.info('🌱 Seeding initial data...');
 
-        const user2 = new UserModel({
-            name: 'Jane Smith',
-            email: 'jane@example.com',
-            username: 'janesmith',
-            phone: '987-654-3210',
-        });
+        const orgs = await OrganizationModel.insertMany([
+            { name: 'Tech Solutions', country: 'Spain' },
+            { name: 'Global Corp', country: 'USA' }
+        ]);
 
-        // Guardar Users de ejemplo
-        const savedUser1 = await user1.save();
-        const savedUser2 = await user2.save();
+        const usersData = [
+            { name: 'Marc', email: 'm@test.com', role: 'ADMIN', organization: orgs[0]._id },
+            { name: 'Anna', email: 'a@test.com', role: 'USER', organization: orgs[0]._id },
+            { name: 'John', email: 'j@test.com', role: 'EDITOR', organization: orgs[1]._id }
+        ];
 
-        // Crear Todos de ejemplo asociadas a los usuarios
-        const todo1 = new TodoModel({
-            user: savedUser1._id,  // Referencia al user1
-            name: 'Complete project',
-            completed: false
-        });
-
-        const todo2 = new TodoModel({
-            user: savedUser1._id,  // Referencia al user1
-            name: 'Buy groceries',
-            completed: false
-        });
-
-        const todo3 = new TodoModel({
-            user: savedUser2._id,  // Referencia al user2
-            name: 'Schedule meeting',
-            completed: true
-        });
-
-        // Guardar los todos en la base de datos
-        const savedTodo1 = await todo1.save();
-        const savedTodo2 = await todo2.save();
-        const savedTodo3 = await todo3.save();
-
+        const users = await UserModel.insertMany(usersData);
+        logger.info('✅ Database ready with %d users', users.length);
         
-    } catch (error) {
-        console.error('Error populating the database: ', error);
-    } 
+    } catch (err) {
+        logger.error(err, '❌ Seeding failed');
+        throw err;
+    }
 }

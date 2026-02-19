@@ -1,26 +1,76 @@
+### Variables de entorno
+@baseUrl = http://localhost:4000/api
+@pingUrl = http://localhost:4000/ping
+
+##############################################
+# HEALTH CHECK
+##############################################
+
+### Check if the API is alive
+GET {{pingUrl}}
+
+##############################################
+# USERS
+##############################################
+
 ### Get all users
-GET http://localhost:4000/api/users/
+GET {{baseUrl}}/users/
 
-### New user
-POST http://localhost:4000/api/users/
+### Get analytics stats (Users per Country)
+GET {{baseUrl}}/users/stats
+
+### Get a specific user (Replace ID)
+GET {{baseUrl}}/users/67cdfc2801cd6988c6ee7a3e
+
+### Create a new user
+POST {{baseUrl}}/users/
 Content-Type: application/json
 
 {
-    "name": "Prova",
-    "email": "prova@example.com",
-    "username": "prova",
-    "phone": "123-456-7890"
+    "name": "Marc Functional",
+    "email": "marc.func@example.com",
+    "role": "ADMIN",
+    "organization": "67cdfc2801cd6988c6ee7a3a"
 }
 
-### Get all todos
-GET http://localhost:4000/api/todos/
-
-### New todo
-POST http://localhost:4000/api/todos/
+### Update an existing user (Replace ID)
+PUT {{baseUrl}}/users/67cdfc2801cd6988c6ee7a3e
 Content-Type: application/json
 
 {
-    "user": "67cdfc2801cd6988c6ee7a3e",
-    "name": "Prova",
-    "completed": false
+    "name": "Marc Updated",
+    "role": "EDITOR"
 }
+
+### Delete a user (Replace ID)
+DELETE {{baseUrl}}/users/67cdfc2801cd6988c6ee7a3e
+
+##############################################
+# ORGANIZATIONS
+##############################################
+
+### Get all organizations
+GET {{baseUrl}}/organizations/
+
+### Get a specific organization (Replace ID)
+GET {{baseUrl}}/organizations/67cdfc2801cd6988c6ee7a3a
+
+### Create a new organization
+POST {{baseUrl}}/organizations/
+Content-Type: application/json
+
+{
+    "name": "Functional Tech",
+    "country": "Catalonia"
+}
+
+### Update an organization (Replace ID)
+PUT {{baseUrl}}/organizations/67cdfc2801cd6988c6ee7a3a
+Content-Type: application/json
+
+{
+    "country": "Spain"
+}
+
+### Delete an organization (Replace ID)
+DELETE {{baseUrl}}/organizations/67cdfc2801cd6988c6ee7a3a
