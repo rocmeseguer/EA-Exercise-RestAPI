@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import { OrganizationModel } from './models/organizationModel.js';
-import { UserModel } from './models/userModel.js';
+import mongoose, { Types } from 'mongoose';
+import { OrganizationModel, IOrganization } from './models/organizationModel.js';
+import { UserModel, IUser } from './models/userModel.js';
 import { config, logger } from './config.js';
 
 export async function setupDatabase(): Promise<void> {
@@ -24,15 +24,15 @@ export async function seedingDatabase(): Promise<void> {
 
         logger.info('🌱 Seeding initial data...');
 
-        const orgs = await OrganizationModel.insertMany([
+        const orgs: IOrganization[] = await OrganizationModel.insertMany([
             { name: 'Tech Solutions', country: 'Spain' },
             { name: 'Global Corp', country: 'USA' }
         ]);
 
-        const usersData = [
-            { name: 'Marc', email: 'm@test.com', role: 'ADMIN', organization: orgs[0]._id },
-            { name: 'Anna', email: 'a@test.com', role: 'USER', organization: orgs[0]._id },
-            { name: 'John', email: 'j@test.com', role: 'EDITOR', organization: orgs[1]._id }
+        const usersData: IUser[] = [
+            { name: 'Marc', email: 'm@test.com', role: 'ADMIN', organization: new Types.ObjectId(orgs[0]._id?.toString()) },
+            { name: 'Anna', email: 'a@test.com', role: 'USER', organization: new Types.ObjectId(orgs[0]._id?.toString()) },
+            { name: 'John', email: 'j@test.com', role: 'EDITOR', organization: new Types.ObjectId(orgs[1]._id?.toString()) }
         ];
 
         const users = await UserModel.insertMany(usersData);
