@@ -1,82 +1,87 @@
-# EA API REST con Express
+# EA REST API with Express & TypeScript
 
-## Requisitos Previos
+This project is a professional REST API developed for the Application Engineering (EA) course. It implements a modern stack focused on type safety and a clean layered architecture.
 
-Asegúrate de tener instalados los siguientes programas en tu sistema:
+## Data Flow and Sequence Diagram
 
-- [Node.js](https://nodejs.org/) (versión 14.x o superior)
-- [MongoDB](https://www.mongodb.com/) (puede ser local o en la nube a través de MongoDB Atlas)
-- [npm](https://www.npmjs.com/) 
+The following diagram illustrates how a request travels through the system, from the HTTP entry point to database persistence, highlighting the data transformation at each stage.
 
-Instalar TypeScript
-```
-npm install -g typescript
-```
+```mermaid
+sequenceDiagram
+    participant C as Client (Frontend/Postman)
+    participant R as Routes (Express)
+    participant M as Middlewares (Logger, Zod)
+    participant Co as Controller
+    participant S as Service (Business Logic)
+    participant Mo as Model (Mongoose/MongoDB)
 
-## Clonar el proyecto
-
-```
-git clone https://github.com/rocmeseguer/EA-Exercise-RestAPI.git
-cd EA-Exercise-RestAPI
-```
-
-## Dependencias del proyecto
-
-### Instalar todas las dependencias
-```
-npm install
-```
-
-### Instalar una a una las dependencias
-
-Express
-```
-npm i express
-npm i @types/express -D
-npm i express-validator
-```
-
-Mongoose
-```
-npm i mongoose
+    Note over C, R: Data: HTTP Request (JSON Body)
+    C->>R: POST /api/users
+    R->>M: Execute Middlewares
+    
+    Note over M: Zod Validation: Validates JSON schema
+    M-->>C: 400 Bad Request (If JSON is invalid)
+    
+    M->>Co: Calls Controller method
+    Note over Co: Manages req/res objects
+    
+    Co->>S: Calls Service (Passes JSON Object)
+    Note over S: Business Logic (IUser / IProject)
+    
+    S->>Mo: CRUD Operation (Mongoose Model)
+    Mo-->>S: Returns Document / JSON Object 
+    
+    S-->>Co: Returns result (JSON Object)
+    Co-->>C: HTTP Response (201 Created + JSON)
 ```
 
-CORS
-```
-npm i cors
-```
+## 🛠 Tecnologías Utilizadas
 
-## Tecnologías utilizadas
+- [Node.js & Express]: Server-side runtime and web framework.
+- [TypeScript]: High-level programming language that adds static typing to JavaScript.
+- [Mongoose]: Object Data Modeling (ODM) library for MongoDB.
+- [Zod]: TypeScript-first schema declaration and validation library.
+- [Pino]: Structured logging library.
+- [CORS]: Middleware to enable cross-origin resource sharing.
 
-- **Node.js**: Un entorno de ejecución de JavaScript en el lado del servidor.
-- **TypeScript**: Lenguaje de programación de alto nivel de código abierto que añade tipado estático a JavaScript.
-- **Mongoose**: Una libreria para usar MondoDB como base de datos.
-- **Express**: Una librería para hacer aplicaciones web
-- **Morgan**: HTTP request logger middleware for node.js
-- **Pino**: Una librería para hacer logs
+## Project Structure
 
-## Estructura del proyecto
+The project follows a layered architecture to improve maintainability and scalability:
 
 ```
 ├── src
-│   ├── middlewares
 │   ├── routes
+│   ├── middlewares
 │   ├── controllers
 │   ├── services
 │   ├── models
 │   ├── database.ts
+│   ├── config.ts       # Configuracion de la API Rest
 │   └── app.ts          # Punto de entrada de la aplicación
-├── dist
-├── package.json       # Configuración de las dependencias y scripts
+├── package.json        # Configuración de las dependencias y scripts
 ├── tsconfig.json       # Configuración de TypeScript
-├── node_modules
 ├── .gitignore
 ├── LICENSE
 └── README.md
 ```
 
-## Ejecutar
+## Setup 
+
+Install all dependencies
+
 ```
-tsc
-node dist/index.js
+npm install
+```
+
+Run in development mode
+
+```
+npm run dev
+```
+
+Build and run in production
+
+```
+npm run build
+npm start
 ```

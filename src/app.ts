@@ -1,8 +1,9 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { apiPort, logger } from './config.js'; 
+import { apiPort } from './config.js'; 
 import userRoutes from './routes/userRoutes.js';
 import organizationRoutes from './routes/organizationRoutes.js';
+import { httpLogger } from './middlewares/loggerMiddleware.js';
 
 const app = express();
 
@@ -23,10 +24,7 @@ app.use(cors());
 app.use(express.json());
 
 // Logging middleware: Logs every incoming HTTP request using Pino
-app.use((req, res, next) => {
-    logger.info(`${req.method} ${req.url}`);
-    next();
-});
+app.use(httpLogger);
 
 /**
  * ⚡️ HEALTH CHECK / PING

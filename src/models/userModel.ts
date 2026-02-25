@@ -24,7 +24,7 @@ export const UserModel = model<IUser>('User', userSchema);
 // User input validation schema
 export const userBodySchema = z.object({
   name: z.string().min(2, "Name is too short"),
-  email: z.string().email("Invalid email format"),
+  email: z.email("Invalid email format"),
   role: z.enum(['ADMIN', 'EDITOR', 'USER']).optional(),
   organization: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid Organization ID format")   // Validamos que sea un ID de MongoDB (24 caracteres hex)
 });
