@@ -33,7 +33,8 @@ export const getUser = async (req: Request<{ id: string }>, res: Response): Prom
 
 export const createNewUser = async (req: Request<{}, {}, Partial<IUser>>, res: Response): Promise<void> => {
     try {
-        // Functional approach: Pass the body directly as a data transformation
+        // The controller just passes the data.
+        // The service handles the creation AND the update of the Organization's user list.
         const newUser = await userService.createUser(req.body);
         res.status(201).json(newUser);
     } catch (error) {
@@ -44,6 +45,8 @@ export const createNewUser = async (req: Request<{}, {}, Partial<IUser>>, res: R
 
 export const updateExistingUser = async (req: Request<{ id: string }, {}, Partial<IUser>>, res: Response): Promise<void> => {
     try {
+        // The controller just passes the data.
+        // The service handles the userUpdate AND the update of the Organization's user list.
         const updated = await userService.updateUser(req.params.id, req.body);
         if (!updated) {
             res.status(404).json({ message: 'User not found' });

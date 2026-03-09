@@ -9,6 +9,10 @@ router.get('/', orgController.getAllOrgs);
 // GET a specific organization
 router.get('/:id', orgController.getOrg);
 
+// GET a specific organization 'users' populated
+// Note: Since getOrg already populates users, we can reuse it
+router.get('/:id/users', orgController.getOrg);
+
 // POST create a new organization
 router.post('/', orgController.createNewOrg);
 

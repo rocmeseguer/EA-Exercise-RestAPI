@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
-import * as orgService from '../services/userOrganization.js';
+import * as orgService from '../services/organizationService.js';
 import { logger } from '../config.js';
 import { IOrganization } from '../models/organizationModel.js';
 
 /**
  * ORGANIZATION CONTROLLER
+ * Only handle HTTP concerns: status codes and JSON formatting.
  */
 
 export const getAllOrgs = async (_req: Request, res: Response): Promise<void> => {

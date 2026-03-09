@@ -21,5 +21,13 @@ export const deleteOrganization = async (id: string): Promise<IOrganization | nu
 };
 
 export const listAllOrganizations = async (): Promise<IOrganization[]> => {
-    return await OrganizationModel.find().lean();
+    return await OrganizationModel.find()
+        .populate('users') // Fetch user details instead of just IDs
+        .lean();           
+};
+
+export const getOrganizationWithUsers = async (id: string): Promise<IOrganization | null> => {
+    return await OrganizationModel.findById(id)
+        .populate('users') // Fetch user details instead of just IDs
+        .lean();
 };
